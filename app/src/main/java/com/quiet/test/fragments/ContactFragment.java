@@ -1,6 +1,7 @@
-package com.quiet.test;
+package com.quiet.test.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -18,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.quiet.test.R;
 
 
 /**
@@ -41,7 +44,6 @@ public class ContactFragment extends ListFragment implements LoaderManager.Loade
     }
 
 
-
     // columns requested from the database
     private static final String[] PROJECTION = {
             ContactsContract.Contacts._ID, // _ID is always required
@@ -49,8 +51,8 @@ public class ContactFragment extends ListFragment implements LoaderManager.Loade
     };
 
     // and name should be displayed in the text1 textview in item layout
-    private static final String[] FROM = { ContactsContract.Contacts.DISPLAY_NAME_PRIMARY };
-    private static final int[] TO = { R.id.text1 };
+    private static final String[] FROM = {ContactsContract.Contacts.DISPLAY_NAME_PRIMARY};
+    private static final int[] TO = {R.id.text1};
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -82,8 +84,9 @@ public class ContactFragment extends ListFragment implements LoaderManager.Loade
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-         super.onListItemClick(l, v, position, id);
-         Toast.makeText(getActivity(), position + "1", Toast.LENGTH_SHORT).show();
+        super.onListItemClick(l, v, position, id);
+        Intent intent=new Intent("test.chat");
+        startActivity(intent);
     }
 
     @Override
