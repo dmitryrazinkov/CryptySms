@@ -18,14 +18,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.quiet.test.R;
 
 
-/**
- * Created by Дмитрий on 06.03.2015.
- */
+
 public class ContactFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private CursorAdapter mAdapter;
@@ -85,7 +84,21 @@ public class ContactFragment extends ListFragment implements LoaderManager.Loade
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
+        ListView listView=getListView();
+
+        int firstPosition = listView.getFirstVisiblePosition() - listView.getHeaderViewsCount();
+        int wantedChild = position - firstPosition;
+        if (wantedChild < 0 || wantedChild >= listView.getChildCount()) {
+            Log.w("", "Unable to get view for desired position," +
+                    " because it's not being displayed on screen.");
+            return;
+        }
+        View wantedView = listView.getChildAt(wantedChild);
+        TextView textView=(TextView) wantedView;
+        String contactName=textView.getText().toString();
+
         Intent intent=new Intent("test.chat");
+        intent.putExtra("contactName",contactName);
         startActivity(intent);
     }
 
