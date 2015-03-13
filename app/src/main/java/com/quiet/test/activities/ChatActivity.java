@@ -70,7 +70,7 @@ public class ChatActivity extends Activity {
     }
 
     private boolean sendChatMessage(){
-        chatArrayAdapter.add(new ChatMessage(side, chatText.getText().toString()));
+        chatArrayAdapter.add(new ChatMessage(false, chatText.getText().toString()));
         chatText.setText("");
         side = !side;
         return true;
