@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,19 +46,21 @@ public class ContactFragment extends ListFragment implements LoaderManager.Loade
 
     // columns requested from the database
     private static final String[] PROJECTION = {
-            ContactsContract.Contacts._ID, // _ID is always required
-            ContactsContract.Contacts.DISPLAY_NAME_PRIMARY // that's what we want to display
+            ContactsContract.CommonDataKinds.Phone._ID,
+            ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.NUMBER
     };
 
     // and name should be displayed in the text1 textview in item layout
-    private static final String[] FROM = {ContactsContract.Contacts.DISPLAY_NAME_PRIMARY};
-    private static final int[] TO = {R.id.text1};
+    private static final String[] FROM = {ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+            ContactsContract.CommonDataKinds.Phone.NUMBER};
+    private static final int[] TO = {R.id.text1, R.id.number1};
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         // load from the "Contacts table"
-        Uri contentUri = ContactsContract.Contacts.CONTENT_URI;
+        Uri contentUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;;
 
         // no sub-selection, no sort order, simply every row
         // projection says we want just the _id and the name column
@@ -94,11 +97,12 @@ public class ContactFragment extends ListFragment implements LoaderManager.Loade
             return;
         }
         View wantedView = listView.getChildAt(wantedChild);
-        TextView textView=(TextView) wantedView;
-        String contactName=textView.getText().toString();
+        LinearLayout linearLayout=(LinearLayout) wantedView;
+        TextView textView=(TextView)linearLayout.getChildAt(1);
+        String number=textView.getText().toString();
 
         Intent intent=new Intent("test.chat");
-        intent.putExtra("contactName",contactName);
+        intent.putExtra("number",number);
         startActivity(intent);
     }
 

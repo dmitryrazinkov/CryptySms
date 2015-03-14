@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AbsListView;
@@ -24,6 +25,8 @@ public class ChatActivity extends Activity {
     private EditText chatText;
     private Button buttonSend;
 
+    private String phoneNumber;
+
     Intent intent;
     private boolean side = false;
 
@@ -31,6 +34,7 @@ public class ChatActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
+        phoneNumber=i.getStringExtra("number");
         setContentView(R.layout.chat_activity);
 
         buttonSend = (Button) findViewById(R.id.buttonSend);
@@ -71,9 +75,15 @@ public class ChatActivity extends Activity {
 
     private boolean sendChatMessage(){
         chatArrayAdapter.add(new ChatMessage(false, chatText.getText().toString()));
+        sendSms();
         chatText.setText("");
         side = !side;
         return true;
+    }
+
+    private void sendSms() {
+        SmsManager sms = SmsManager.getDefault();
+        sms.sendTextMessage(phoneNumber,null,chatText.getText().toString(),null,null);
     }
 
 }
