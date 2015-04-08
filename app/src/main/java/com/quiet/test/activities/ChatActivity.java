@@ -1,8 +1,11 @@
 package com.quiet.test.activities;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.KeyEvent;
@@ -16,6 +19,9 @@ import android.widget.TextView;
 import com.quiet.test.R;
 import com.quiet.test.chat.ChatArrayAdapter;
 import com.quiet.test.chat.ChatMessage;
+import com.quiet.test.databases.Db;
+
+import java.util.Date;
 
 public class ChatActivity extends Activity {
     private static final String TAG = "ChatActivity";
@@ -35,7 +41,7 @@ public class ChatActivity extends Activity {
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
         phoneNumber=i.getStringExtra("number");
-        String sms_body=i.getStringExtra("sms_body");
+       // String sms_body=i.getStringExtra("sms_body");
 
         setContentView(R.layout.chat_activity);
 
@@ -74,14 +80,37 @@ public class ChatActivity extends Activity {
             }
         });
 
-        if (sms_body!=null) {
-            chatArrayAdapter.add(new ChatMessage(true, sms_body));
+        fillChat();
+        //if (sms_body!=null) {
+        //    chatArrayAdapter.add(new ChatMessage(true, sms_body));
+        //}
+    }
+
+    private void fillChat() {
+        String message="";
+        Integer isIncome=0;
+        Db db=new Db(this);
+        SQLiteDatabase database=db.getWritableDatabase();
+        String[] args=new String[]{phoneNumber};
+        Cursor c=database.query("messages",null,"number=?",args,null,null,"date");
+        if(c.moveToFirst()) {
+            do  {
+                message=c.getString(c.getColumnIndex("message"));
+                isIncome=c.getInt(c.getColumnIndex("isIncome"));
+                if (isIncome==0) {
+                    chatArrayAdapter.add(new ChatMessage(false, message));
+                } else {
+                    chatArrayAdapter.add(new ChatMessage(true, message));
+                }
+            }
+            while (c.moveToNext());
         }
+        db.close();
     }
 
     private boolean sendChatMessage(){
         chatArrayAdapter.add(new ChatMessage(false, chatText.getText().toString()));
-       // sendSms();
+        sendSms();
         chatText.setText("");
         side = !side;
         return true;
@@ -90,6 +119,16 @@ public class ChatActivity extends Activity {
     private void sendSms() {
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber,null,chatText.getText().toString(),null,null);
+
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("number",phoneNumber);
+        contentValues.put("message",chatText.getText().toString());
+        contentValues.put("isIncome",0);
+        contentValues.put("date", new Date().getTime());
+
+        Db db=new Db(this);
+        SQLiteDatabase database=db.getWritableDatabase();
+        database.insert("messages", null, contentValues);
     }
 
 }
