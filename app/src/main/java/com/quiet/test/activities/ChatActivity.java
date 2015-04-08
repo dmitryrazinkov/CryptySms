@@ -35,6 +35,8 @@ public class ChatActivity extends Activity {
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
         phoneNumber=i.getStringExtra("number");
+        String sms_body=i.getStringExtra("sms_body");
+
         setContentView(R.layout.chat_activity);
 
         buttonSend = (Button) findViewById(R.id.buttonSend);
@@ -71,11 +73,15 @@ public class ChatActivity extends Activity {
                 listView.setSelection(chatArrayAdapter.getCount() - 1);
             }
         });
+
+        if (sms_body!=null) {
+            chatArrayAdapter.add(new ChatMessage(true, sms_body));
+        }
     }
 
     private boolean sendChatMessage(){
         chatArrayAdapter.add(new ChatMessage(false, chatText.getText().toString()));
-        sendSms();
+       // sendSms();
         chatText.setText("");
         side = !side;
         return true;
