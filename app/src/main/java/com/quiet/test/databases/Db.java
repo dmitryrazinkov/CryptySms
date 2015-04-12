@@ -14,7 +14,8 @@ public class Db extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL("create table keys(" +
                 "number text primary key," +
-                " key integer" +
+                "rsa_key integer," +
+                "aes_key text" +
                 ")");
         db.execSQL("create table messages(" +
                 "number text," +

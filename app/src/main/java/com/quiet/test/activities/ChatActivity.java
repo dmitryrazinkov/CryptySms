@@ -21,6 +21,8 @@ import com.quiet.test.chat.ChatArrayAdapter;
 import com.quiet.test.chat.ChatMessage;
 import com.quiet.test.databases.Db;
 
+import org.apache.commons.codec.binary.Base64;
+
 import java.util.Date;
 
 public class ChatActivity extends Activity {
@@ -30,8 +32,11 @@ public class ChatActivity extends Activity {
     private ListView listView;
     private EditText chatText;
     private Button buttonSend;
+    private Button buttonGetKey;
 
     private String phoneNumber;
+
+    private byte[] aesKey;
 
     Intent intent;
     private boolean side = false;
@@ -46,6 +51,12 @@ public class ChatActivity extends Activity {
         setContentView(R.layout.chat_activity);
 
         buttonSend = (Button) findViewById(R.id.buttonSend);
+        buttonGetKey=  (Button)findViewById(R.id.buttonKey);
+
+        aesKey=getAesKey();
+        if (aesKey==null) {
+            buttonSend.setEnabled(false);
+        }
 
         listView = (ListView) findViewById(R.id.listView1);
 
@@ -86,6 +97,17 @@ public class ChatActivity extends Activity {
         //}
     }
 
+    private byte[] getAesKey() {
+        Db db=new Db(this);
+        SQLiteDatabase database=db.getWritableDatabase();
+        String[] args=new String[]{phoneNumber};
+        Cursor c=database.query("keys",null,"number=?",args,null,null,null);
+        if (c.moveToFirst()) {
+            return Base64.decodeBase64(c.getString(c.getColumnIndex("aes_key")));
+        }
+        return null;
+    }
+
     private void fillChat() {
         String message="";
         Integer isIncome=0;
@@ -119,7 +141,10 @@ public class ChatActivity extends Activity {
     private void sendSms() {
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber,null,chatText.getText().toString(),null,null);
+        addSmsToDb();
+    }
 
+    private void addSmsToDb() {
         ContentValues contentValues = new ContentValues();
         contentValues.put("number",phoneNumber);
         contentValues.put("message",chatText.getText().toString());
