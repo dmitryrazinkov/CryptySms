@@ -56,6 +56,8 @@ public class ChatActivity extends Activity {
         aesKey=getAesKey();
         if (aesKey==null) {
             buttonSend.setEnabled(false);
+        } else {
+            buttonGetKey.setEnabled(true);
         }
 
         listView = (ListView) findViewById(R.id.listView1);
@@ -67,15 +69,23 @@ public class ChatActivity extends Activity {
         chatText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    return sendChatMessage();
-                }
-                return false;
+                return sendChatMessage();
             }
-        });
-        buttonSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View arg0) {
-                sendChatMessage();
+            return false;
+        }
+    });
+    buttonSend.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View arg0) {
+            sendChatMessage();
+        }
+    });
+
+    buttonGetKey.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+                SmsManager smsManager=SmsManager.getDefault();
+                //smsManager.sendDataMessage();
             }
         });
 
