@@ -19,6 +19,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
         String number=messages[0].getOriginatingAddress();
 
+
         StringBuilder bodyText = new StringBuilder();
         for (int i = 0; i < messages.length; i++) {
             bodyText.append(messages[i].getMessageBody());

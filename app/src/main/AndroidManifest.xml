@@ -33,7 +33,36 @@
                 <action android:name="android.provider.Telephony.SMS_RECEIVED"/>
             </intent-filter>
         </receiver>
-
+        <receiver
+            android:name=".receivers.DataRsaSmsReceiver">
+            <intent-filter android:priority="10" >
+                <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
+                <data
+                    android:scheme="sms"
+                    android:host="*"
+                    android:port="4444" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receivers.DataModSmsReceiver">
+            <intent-filter android:priority="10" >
+                <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
+                <data
+                    android:scheme="sms"
+                    android:host="*"
+                    android:port="4445" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".receivers.DataAesSmsReceiver">
+            <intent-filter android:priority="10" >
+                <action android:name="android.intent.action.DATA_SMS_RECEIVED" />
+                <data
+                    android:scheme="sms"
+                    android:host="*"
+                    android:port="4446" />
+            </intent-filter>
+        </receiver>
         <service android:name=".services.SmsService">
 
         </service>

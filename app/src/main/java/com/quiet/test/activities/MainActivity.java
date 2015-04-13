@@ -1,6 +1,7 @@
 package com.quiet.test.activities;
 
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,11 +32,12 @@ public class MainActivity extends ActionBarActivity {
     }
 
     private void rsaInit() throws NoSuchAlgorithmException, InvalidKeySpecException {
-        sharedPreferences=getPreferences(MODE_PRIVATE);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         BigInteger rsa_private=BigInteger.valueOf(sharedPreferences.getInt("rsa_private", 0));
         BigInteger rsa_public=BigInteger.valueOf(sharedPreferences.getInt("rsa_public", 0));
         BigInteger rsa_mod=BigInteger.valueOf(sharedPreferences.getInt("rsa_mod", 0));
         if (rsa_private.equals(new BigInteger("0"))) {
+            System.out.println("create rsa key");
             RSA rsa=new RSA();
             rsa.generateKey();
             SharedPreferences.Editor editor=sharedPreferences.edit();

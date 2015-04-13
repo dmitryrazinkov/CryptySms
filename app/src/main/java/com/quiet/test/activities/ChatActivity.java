@@ -3,10 +3,12 @@ package com.quiet.test.activities;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.view.KeyEvent;
 import android.view.View;
@@ -23,6 +25,7 @@ import com.quiet.test.databases.Db;
 
 import org.apache.commons.codec.binary.Base64;
 
+import java.math.BigInteger;
 import java.util.Date;
 
 public class ChatActivity extends Activity {
@@ -40,6 +43,7 @@ public class ChatActivity extends Activity {
 
     Intent intent;
     private boolean side = false;
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,8 +88,8 @@ public class ChatActivity extends Activity {
     buttonGetKey.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-                SmsManager smsManager=SmsManager.getDefault();
-                //smsManager.sendDataMessage();
+                sendRSAkey();
+                sendRSAmod();
             }
         });
 
@@ -105,6 +109,27 @@ public class ChatActivity extends Activity {
         //if (sms_body!=null) {
         //    chatArrayAdapter.add(new ChatMessage(true, sms_body));
         //}
+    }
+
+    private void sendRSAmod() {
+        sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        BigInteger rsa_mod=BigInteger.valueOf(sharedPreferences.getInt("rsa_mod", 0));
+        System.out.println(rsa_mod);
+        byte[] data=rsa_mod.toByteArray();
+        SmsManager smsManager= SmsManager.getDefault();
+        short port=4445;
+        smsManager.sendDataMessage(phoneNumber,null,port,data,null,null);
+    }
+
+    private void sendRSAkey() {
+        sharedPreferences=PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        BigInteger rsa_public=BigInteger.valueOf(sharedPreferences.getInt("rsa_public", 0));
+        System.out.println(rsa_public);
+        byte[] data=rsa_public.toByteArray();
+        SmsManager smsManager= SmsManager.getDefault();
+        short port=4444;
+        smsManager.sendDataMessage(phoneNumber,null,port,data,null,null);
+
     }
 
     private byte[] getAesKey() {
