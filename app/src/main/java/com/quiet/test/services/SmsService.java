@@ -18,6 +18,7 @@ public class SmsService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
+        System.out.println("Sms service");
         String sms_body = intent.getExtras().getString("sms_body");
         String number=intent.getExtras().getString("number");
         processSms(sms_body,number);

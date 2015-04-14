@@ -88,8 +88,8 @@ public class ChatActivity extends Activity {
     buttonGetKey.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-                sendRSAkey();
                 sendRSAmod();
+                sendRSAkey();
             }
         });
 

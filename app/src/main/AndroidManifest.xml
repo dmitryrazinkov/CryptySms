@@ -66,6 +66,15 @@
         <service android:name=".services.SmsService">
 
         </service>
+        <service android:name=".services.ModSmsService">
+
+        </service>
+        <service android:name=".services.RsaSmsService">
+
+        </service>
+        <service android:name=".services.AesSmsServise">
+
+        </service>
     </application>
 
 
