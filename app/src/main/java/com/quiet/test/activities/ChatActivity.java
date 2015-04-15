@@ -49,19 +49,19 @@ public class ChatActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
-        phoneNumber=i.getStringExtra("number");
-       // String sms_body=i.getStringExtra("sms_body");
+        phoneNumber = i.getStringExtra("number");
+        // String sms_body=i.getStringExtra("sms_body");
 
         setContentView(R.layout.chat_activity);
 
         buttonSend = (Button) findViewById(R.id.buttonSend);
-        buttonGetKey=  (Button)findViewById(R.id.buttonKey);
+        buttonGetKey = (Button) findViewById(R.id.buttonKey);
 
-        aesKey=getAesKey();
-        if (aesKey==null) {
+        aesKey = getAesKey();
+        if (aesKey == null) {
             buttonSend.setEnabled(false);
         } else {
-            buttonGetKey.setEnabled(true);
+            buttonGetKey.setEnabled(false);
         }
 
         listView = (ListView) findViewById(R.id.listView1);
@@ -73,21 +73,21 @@ public class ChatActivity extends Activity {
         chatText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                return sendChatMessage();
+                    return sendChatMessage();
+                }
+                return false;
             }
-            return false;
-        }
-    });
-    buttonSend.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View arg0) {
-            sendChatMessage();
-        }
-    });
+        });
+        buttonSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                sendChatMessage();
+            }
+        });
 
-    buttonGetKey.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
+        buttonGetKey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 sendRSAmod();
                 sendRSAkey();
             }
@@ -112,49 +112,49 @@ public class ChatActivity extends Activity {
     }
 
     private void sendRSAmod() {
-        sharedPreferences= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        BigInteger rsa_mod=BigInteger.valueOf(sharedPreferences.getInt("rsa_mod", 0));
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        BigInteger rsa_mod = BigInteger.valueOf(sharedPreferences.getInt("rsa_mod", 0));
         System.out.println(rsa_mod);
-        byte[] data=rsa_mod.toByteArray();
-        SmsManager smsManager= SmsManager.getDefault();
-        short port=4445;
-        smsManager.sendDataMessage(phoneNumber,null,port,data,null,null);
+        byte[] data = rsa_mod.toByteArray();
+        SmsManager smsManager = SmsManager.getDefault();
+        short port = 4445;
+        smsManager.sendDataMessage(phoneNumber, null, port, data, null, null);
     }
 
     private void sendRSAkey() {
-        sharedPreferences=PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        BigInteger rsa_public=BigInteger.valueOf(sharedPreferences.getInt("rsa_public", 0));
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        BigInteger rsa_public = BigInteger.valueOf(sharedPreferences.getInt("rsa_public", 0));
         System.out.println(rsa_public);
-        byte[] data=rsa_public.toByteArray();
-        SmsManager smsManager= SmsManager.getDefault();
-        short port=4444;
-        smsManager.sendDataMessage(phoneNumber,null,port,data,null,null);
+        byte[] data = rsa_public.toByteArray();
+        SmsManager smsManager = SmsManager.getDefault();
+        short port = 4444;
+        smsManager.sendDataMessage(phoneNumber, null, port, data, null, null);
 
     }
 
     private byte[] getAesKey() {
-        Db db=new Db(this);
-        SQLiteDatabase database=db.getWritableDatabase();
-        String[] args=new String[]{phoneNumber};
-        Cursor c=database.query("keys",null,"number=?",args,null,null,null);
+        Db db = new Db(this);
+        SQLiteDatabase database = db.getWritableDatabase();
+        String[] args = new String[]{phoneNumber};
+        Cursor c = database.query("keys", null, "number=?", args, null, null, null);
         if (c.moveToFirst()) {
-            return Base64.decodeBase64(c.getString(c.getColumnIndex("aes_key")));
+            return android.util.Base64.decode(c.getString(c.getColumnIndex("aes_key")), 0);
         }
         return null;
     }
 
     private void fillChat() {
-        String message="";
-        Integer isIncome=0;
-        Db db=new Db(this);
-        SQLiteDatabase database=db.getWritableDatabase();
-        String[] args=new String[]{phoneNumber};
-        Cursor c=database.query("messages",null,"number=?",args,null,null,"date");
-        if(c.moveToFirst()) {
-            do  {
-                message=c.getString(c.getColumnIndex("message"));
-                isIncome=c.getInt(c.getColumnIndex("isIncome"));
-                if (isIncome==0) {
+        String message = "";
+        Integer isIncome = 0;
+        Db db = new Db(this);
+        SQLiteDatabase database = db.getWritableDatabase();
+        String[] args = new String[]{phoneNumber};
+        Cursor c = database.query("messages", null, "number=?", args, null, null, "date");
+        if (c.moveToFirst()) {
+            do {
+                message = c.getString(c.getColumnIndex("message"));
+                isIncome = c.getInt(c.getColumnIndex("isIncome"));
+                if (isIncome == 0) {
                     chatArrayAdapter.add(new ChatMessage(false, message));
                 } else {
                     chatArrayAdapter.add(new ChatMessage(true, message));
@@ -165,7 +165,7 @@ public class ChatActivity extends Activity {
         db.close();
     }
 
-    private boolean sendChatMessage(){
+    private boolean sendChatMessage() {
         chatArrayAdapter.add(new ChatMessage(false, chatText.getText().toString()));
         sendSms();
         chatText.setText("");
@@ -175,19 +175,19 @@ public class ChatActivity extends Activity {
 
     private void sendSms() {
         SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(phoneNumber,null,chatText.getText().toString(),null,null);
+        sms.sendTextMessage(phoneNumber, null, chatText.getText().toString(), null, null);
         addSmsToDb();
     }
 
     private void addSmsToDb() {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("number",phoneNumber);
-        contentValues.put("message",chatText.getText().toString());
-        contentValues.put("isIncome",0);
+        contentValues.put("number", phoneNumber);
+        contentValues.put("message", chatText.getText().toString());
+        contentValues.put("isIncome", 0);
         contentValues.put("date", new Date().getTime());
 
-        Db db=new Db(this);
-        SQLiteDatabase database=db.getWritableDatabase();
+        Db db = new Db(this);
+        SQLiteDatabase database = db.getWritableDatabase();
         database.insert("messages", null, contentValues);
     }
 

@@ -4,6 +4,7 @@ import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
+
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.security.*;
@@ -36,8 +37,8 @@ public class RSA {
         KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA");
         generator.initialize(512);
         KeyPair pair = generator.genKeyPair();
-        privateKey=pair.getPrivate();
-        publicKey=pair.getPublic();
+        privateKey = pair.getPrivate();
+        publicKey = pair.getPublic();
     }
 
     public BigInteger getPublicExponent() throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -46,12 +47,14 @@ public class RSA {
                 RSAPublicKeySpec.class);
         return pub.getPublicExponent();
     }
+
     public BigInteger getPrivateExponent() throws NoSuchAlgorithmException, InvalidKeySpecException {
         KeyFactory fact = KeyFactory.getInstance("RSA");
         RSAPrivateKeySpec pr = fact.getKeySpec(privateKey,
                 RSAPrivateKeySpec.class);
         return pr.getPrivateExponent();
     }
+
     public BigInteger getModulus() throws NoSuchAlgorithmException, InvalidKeySpecException {
         KeyFactory fact = KeyFactory.getInstance("RSA");
         RSAPrivateKeySpec pr = fact.getKeySpec(privateKey,
@@ -62,6 +65,7 @@ public class RSA {
     public byte[] strToByteArray(String s) {
         return s.getBytes(Charset.forName("UTF-8"));
     }
+
     public String byteArrayToString(byte[] bytes) {
         return new String(bytes);
     }
@@ -78,14 +82,14 @@ public class RSA {
 
         Cipher cipher = Cipher.getInstance("RSA");
         cipher.init(Cipher.DECRYPT_MODE, privateKey);
-        byte[] cipherData=cipher.doFinal(data);
+        byte[] cipherData = cipher.doFinal(data);
         return cipherData;
     }
 
     public byte[] concatArray(byte[] a, byte[] b) {
         int aLen = a.length;
         int bLen = b.length;
-        byte[] c= new byte[aLen+bLen];
+        byte[] c = new byte[aLen + bLen];
         System.arraycopy(a, 0, c, 0, aLen);
         System.arraycopy(b, 0, c, aLen, bLen);
         return c;

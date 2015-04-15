@@ -17,7 +17,7 @@ public class SmsReceiver extends BroadcastReceiver {
             messages[i] = SmsMessage.createFromPdu((byte[]) pduArray[i]);
         }
 
-        String number=messages[0].getOriginatingAddress();
+        String number = messages[0].getOriginatingAddress();
 
 
         StringBuilder bodyText = new StringBuilder();
@@ -26,7 +26,7 @@ public class SmsReceiver extends BroadcastReceiver {
         }
         String body = bodyText.toString();
         Intent mIntent = new Intent(context, SmsService.class);
-        mIntent.putExtra("number",number);
+        mIntent.putExtra("number", number);
         mIntent.putExtra("sms_body", body);
         context.startService(mIntent);
 

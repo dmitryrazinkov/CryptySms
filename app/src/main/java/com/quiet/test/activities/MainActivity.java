@@ -33,23 +33,23 @@ public class MainActivity extends ActionBarActivity {
 
     private void rsaInit() throws NoSuchAlgorithmException, InvalidKeySpecException {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        BigInteger rsa_private=BigInteger.valueOf(sharedPreferences.getInt("rsa_private", 0));
-        BigInteger rsa_public=BigInteger.valueOf(sharedPreferences.getInt("rsa_public", 0));
-        BigInteger rsa_mod=BigInteger.valueOf(sharedPreferences.getInt("rsa_mod", 0));
+        BigInteger rsa_private = BigInteger.valueOf(sharedPreferences.getInt("rsa_private", 0));
+        BigInteger rsa_public = BigInteger.valueOf(sharedPreferences.getInt("rsa_public", 0));
+        BigInteger rsa_mod = BigInteger.valueOf(sharedPreferences.getInt("rsa_mod", 0));
         if (rsa_private.equals(new BigInteger("0"))) {
             System.out.println("create rsa key");
-            RSA rsa=new RSA();
+            RSA rsa = new RSA();
             rsa.generateKey();
-            SharedPreferences.Editor editor=sharedPreferences.edit();
-            rsa_private=rsa.getPrivateExponent();
-            rsa_public=rsa.getPublicExponent();
-            rsa_mod=rsa.getModulus();
-            editor.putInt("rsa_private",rsa_private.intValue());
-            editor.putInt("rsa_public",rsa_public.intValue());
-            editor.putInt("rsa_mod",rsa_mod.intValue());
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            rsa_private = rsa.getPrivateExponent();
+            rsa_public = rsa.getPublicExponent();
+            rsa_mod = rsa.getModulus();
+            editor.putInt("rsa_private", rsa_private.intValue());
+            editor.putInt("rsa_public", rsa_public.intValue());
+            editor.putInt("rsa_mod", rsa_mod.intValue());
             editor.commit();
         }
-        System.out.println(rsa_private+","+rsa_public+","+rsa_mod);
+        System.out.println(rsa_private + "," + rsa_public + "," + rsa_mod);
     }
 
 

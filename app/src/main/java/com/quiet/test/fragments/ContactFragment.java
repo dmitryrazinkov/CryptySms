@@ -25,7 +25,6 @@ import android.widget.Toast;
 import com.quiet.test.R;
 
 
-
 public class ContactFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private CursorAdapter mAdapter;
@@ -60,7 +59,8 @@ public class ContactFragment extends ListFragment implements LoaderManager.Loade
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
         // load from the "Contacts table"
-        Uri contentUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;;
+        Uri contentUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+        ;
 
         // no sub-selection, no sort order, simply every row
         // projection says we want just the _id and the name column
@@ -87,7 +87,7 @@ public class ContactFragment extends ListFragment implements LoaderManager.Loade
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
-        ListView listView=getListView();
+        ListView listView = getListView();
 
         int firstPosition = listView.getFirstVisiblePosition() - listView.getHeaderViewsCount();
         int wantedChild = position - firstPosition;
@@ -97,12 +97,12 @@ public class ContactFragment extends ListFragment implements LoaderManager.Loade
             return;
         }
         View wantedView = listView.getChildAt(wantedChild);
-        LinearLayout linearLayout=(LinearLayout) wantedView;
-        TextView textView=(TextView)linearLayout.getChildAt(1);
-        String number=textView.getText().toString();
+        LinearLayout linearLayout = (LinearLayout) wantedView;
+        TextView textView = (TextView) linearLayout.getChildAt(1);
+        String number = textView.getText().toString();
 
-        Intent intent=new Intent("test.chat");
-        intent.putExtra("number",number);
+        Intent intent = new Intent("test.chat");
+        intent.putExtra("number", number);
         startActivity(intent);
     }
 
