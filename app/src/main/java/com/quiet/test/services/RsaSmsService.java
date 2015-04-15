@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.util.Base64;
+import android.util.Log;
 
 import com.quiet.test.crypt.AES;
 import com.quiet.test.crypt.RSA;
@@ -28,6 +29,8 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class RsaSmsService extends Service {
+    String TAG="RsaSmsService";
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -35,7 +38,7 @@ public class RsaSmsService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        System.out.println("rsa service");
+        Log.d(TAG,"rsa service");
         String number = intent.getExtras().getString("number");
         byte[] data = intent.getExtras().getByteArray("data");
         BigInteger rsa_key = new BigInteger(data);
@@ -65,7 +68,7 @@ public class RsaSmsService extends Service {
         ContentValues contentValues = new ContentValues();
         contentValues.put("rsa_key", rsa_key.toString());
 
-        System.out.println(number + ":" + rsa_key);
+        Log.d(TAG ,number + ":" + rsa_key);
 
         Db db = new Db(this);
         SQLiteDatabase database = db.getWritableDatabase();
@@ -86,7 +89,7 @@ public class RsaSmsService extends Service {
         aes.generateKey();
         byte[] aes_key = aes.getEncryptionKey().getEncoded();
         String string_aes = Base64.encodeToString(aes_key, Base64.DEFAULT);
-        System.out.println("String aes " + string_aes);
+        Log.d(TAG ,"String aes " + string_aes);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -102,7 +105,7 @@ public class RsaSmsService extends Service {
 
         RSA rsa = new RSA();
         rsa.setPublicKey(pub);
-        System.out.println(aes_key.length);
+        Log.d(TAG ,String.valueOf(aes_key.length));
         byte[] aes_encrypt = rsa.rsaEncrypt(aes_key);
 
         addAesKeyToDb(Base64.encodeToString(aes_key, Base64.DEFAULT), number);
@@ -128,7 +131,7 @@ public class RsaSmsService extends Service {
     private void sendAesKey(byte[] aes_encrypt, String number) {
         SmsManager sms = SmsManager.getDefault();
         short port = 4446;
-        System.out.println("aes sending");
+        Log.d(TAG,"aes sending");
         sms.sendDataMessage(number, null, port, aes_encrypt, null, null);
     }
 
@@ -138,7 +141,7 @@ public class RsaSmsService extends Service {
         String[] args = new String[]{number};
         Cursor c = database.query("keys", null, "number=?", args, null, null, null);
         if (c.moveToFirst()) {
-            BigInteger mod = BigInteger.valueOf(c.getInt(c.getColumnIndex("rsa_mod")));
+            BigInteger mod = new BigInteger(c.getString(c.getColumnIndex("rsa_mod")));
             db.close();
             return mod;
         }

@@ -15,7 +15,7 @@ public class Db extends SQLiteOpenHelper {
         db.execSQL("create table keys(" +
                 "number text primary key," +
                 "rsa_key text," +
-                "rsa_mod text" +
+                "rsa_mod text," +
                 "aes_key text" +
                 ")");
         db.execSQL("create table messages(" +

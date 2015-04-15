@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
+import android.util.Log;
 
 import com.quiet.test.databases.Db;
 
@@ -13,6 +14,8 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public class ModSmsService extends Service {
+    String TAG="ModSmsService";
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -20,7 +23,7 @@ public class ModSmsService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        System.out.println("mod service");
+        Log.d(TAG, "mod service");
         String number = intent.getExtras().getString("number");
         byte[] data = intent.getExtras().getByteArray("data");
         BigInteger mod = new BigInteger(data);
@@ -36,7 +39,7 @@ public class ModSmsService extends Service {
         ContentValues contentValues = new ContentValues();
         contentValues.put("rsa_mod", mod.toString());
 
-        System.out.println(number + ":" + mod);
+        Log.d(TAG,number + ":" + mod);
 
         Db db = new Db(this);
         SQLiteDatabase database = db.getWritableDatabase();

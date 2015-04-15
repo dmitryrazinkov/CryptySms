@@ -4,13 +4,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 import com.quiet.test.services.ModSmsService;
 
 public class DataModSmsReceiver extends BroadcastReceiver {
+    String TAG="DataModSmsReceiver";
     @Override
     public void onReceive(Context context, Intent intent) {
-        System.out.println("mod reciver");
+        Log.d(TAG,"mod reciver");
         Object[] pduArray = (Object[]) intent.getExtras().get("pdus");
         SmsMessage[] messages = new SmsMessage[pduArray.length];
         for (int i = 0; i < pduArray.length; i++) {

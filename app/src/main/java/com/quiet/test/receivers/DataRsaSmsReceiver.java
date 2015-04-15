@@ -4,14 +4,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 import com.quiet.test.services.ModSmsService;
 import com.quiet.test.services.RsaSmsService;
 
 public class DataRsaSmsReceiver extends BroadcastReceiver {
+    String TAG="DataRsaSmsReceiver";
     @Override
     public void onReceive(Context context, Intent intent) {
-        System.out.println("rsa reciver");
+        Log.d(TAG , "rsa reciver");
         Object[] pduArray = (Object[]) intent.getExtras().get("pdus");
         SmsMessage[] messages = new SmsMessage[pduArray.length];
         for (int i = 0; i < pduArray.length; i++) {

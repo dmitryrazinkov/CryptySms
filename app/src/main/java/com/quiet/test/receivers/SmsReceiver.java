@@ -4,13 +4,16 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 import com.quiet.test.services.SmsService;
 
 public class SmsReceiver extends BroadcastReceiver {
+    String TAG="SmsReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        Log.d(TAG,"sms receiver");
         Object[] pduArray = (Object[]) intent.getExtras().get("pdus");
         SmsMessage[] messages = new SmsMessage[pduArray.length];
         for (int i = 0; i < pduArray.length; i++) {
