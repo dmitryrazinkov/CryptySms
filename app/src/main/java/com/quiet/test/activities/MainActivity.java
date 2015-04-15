@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -16,6 +17,7 @@ import java.security.spec.InvalidKeySpecException;
 
 
 public class MainActivity extends ActionBarActivity {
+
     SharedPreferences sharedPreferences;
 
     @Override
@@ -33,20 +35,20 @@ public class MainActivity extends ActionBarActivity {
 
     private void rsaInit() throws NoSuchAlgorithmException, InvalidKeySpecException {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        BigInteger rsa_private = BigInteger.valueOf(sharedPreferences.getInt("rsa_private", 0));
-        BigInteger rsa_public = BigInteger.valueOf(sharedPreferences.getInt("rsa_public", 0));
-        BigInteger rsa_mod = BigInteger.valueOf(sharedPreferences.getInt("rsa_mod", 0));
+        BigInteger rsa_private = new BigInteger(sharedPreferences.getString("rsa_private", "0"));
+        BigInteger rsa_public =new BigInteger(sharedPreferences.getString("rsa_public", "0"));
+        BigInteger rsa_mod = new BigInteger(sharedPreferences.getString("rsa_mod", "0"));
         if (rsa_private.equals(new BigInteger("0"))) {
-            System.out.println("create rsa key");
+            Log.d(this.getLocalClassName(),"create rsa key");
             RSA rsa = new RSA();
             rsa.generateKey();
             SharedPreferences.Editor editor = sharedPreferences.edit();
             rsa_private = rsa.getPrivateExponent();
             rsa_public = rsa.getPublicExponent();
             rsa_mod = rsa.getModulus();
-            editor.putInt("rsa_private", rsa_private.intValue());
-            editor.putInt("rsa_public", rsa_public.intValue());
-            editor.putInt("rsa_mod", rsa_mod.intValue());
+            editor.putString("rsa_private", rsa_private.toString());
+            editor.putString("rsa_public", rsa_public.toString());
+            editor.putString("rsa_mod", rsa_mod.toString());
             editor.commit();
         }
         System.out.println(rsa_private + "," + rsa_public + "," + rsa_mod);

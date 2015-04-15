@@ -34,7 +34,7 @@ public class ModSmsService extends Service {
 
     private void addToDatabase(BigInteger mod, String number) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("rsa_mod", mod.intValue());
+        contentValues.put("rsa_mod", mod.toString());
 
         System.out.println(number + ":" + mod);
 

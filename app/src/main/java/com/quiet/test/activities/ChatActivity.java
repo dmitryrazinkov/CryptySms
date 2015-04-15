@@ -10,6 +10,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AbsListView;
@@ -112,8 +113,9 @@ public class ChatActivity extends Activity {
     }
 
     private void sendRSAmod() {
+        Log.d(this.getLocalClassName(),"send rsa mod");
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        BigInteger rsa_mod = BigInteger.valueOf(sharedPreferences.getInt("rsa_mod", 0));
+        BigInteger rsa_mod = new BigInteger(sharedPreferences.getString("rsa_mod", "0"));
         System.out.println(rsa_mod);
         byte[] data = rsa_mod.toByteArray();
         SmsManager smsManager = SmsManager.getDefault();
@@ -122,8 +124,9 @@ public class ChatActivity extends Activity {
     }
 
     private void sendRSAkey() {
+        Log.d(this.getLocalClassName(),"send rsa key");
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        BigInteger rsa_public = BigInteger.valueOf(sharedPreferences.getInt("rsa_public", 0));
+        BigInteger rsa_public = new BigInteger(sharedPreferences.getString("rsa_public", "0"));
         System.out.println(rsa_public);
         byte[] data = rsa_public.toByteArray();
         SmsManager smsManager = SmsManager.getDefault();
@@ -174,6 +177,7 @@ public class ChatActivity extends Activity {
     }
 
     private void sendSms() {
+        Log.d(this.getLocalClassName(),"sending sms");
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(phoneNumber, null, chatText.getText().toString(), null, null);
         addSmsToDb();

@@ -63,7 +63,7 @@ public class RsaSmsService extends Service {
 
     private void addToDatabase(BigInteger rsa_key, String number) throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, BadPaddingException, NoSuchPaddingException, IllegalBlockSizeException {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("rsa_key", rsa_key.intValue());
+        contentValues.put("rsa_key", rsa_key.toString());
 
         System.out.println(number + ":" + rsa_key);
 
@@ -142,7 +142,7 @@ public class RsaSmsService extends Service {
             db.close();
             return mod;
         }
-        return null;
+        return new BigInteger("65537");
     }
 }
 
