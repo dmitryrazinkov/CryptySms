@@ -10,4 +10,5 @@
     <string name="Add">Add</string>
     <string name="password">password</string>
     <string name="login">Login</string>
+    <string name="get_key">Get Key</string>
 </resources>

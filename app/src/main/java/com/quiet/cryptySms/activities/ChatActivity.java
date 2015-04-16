@@ -14,12 +14,15 @@ import android.support.v7.app.ActionBarActivity;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.quiet.cryptySms.AndroidDatabaseManager;
 import com.quiet.cryptySms.R;
 import com.quiet.cryptySms.chat.ChatArrayAdapter;
 import com.quiet.cryptySms.chat.ChatMessage;
@@ -38,10 +41,10 @@ public class ChatActivity extends ActionBarActivity {
     private ListView listView;
     private EditText chatText;
     private Button buttonSend;
-    private Button buttonGetKey;
 
     private String name;
     private String phoneNumber;
+    private boolean getMenuIsVisible=true;
 
     private byte[] aesKey;
     private AES aes;
@@ -57,20 +60,17 @@ public class ChatActivity extends ActionBarActivity {
         phoneNumber = i.getStringExtra("number");
         name = i.getStringExtra("name");
         actionBarSetup(name, phoneNumber);
-        // getActionBar().setTitle(name);
-        // String sms_body=i.getStringExtra("sms_body");
 
         setContentView(R.layout.chat_activity);
 
         buttonSend = (Button) findViewById(R.id.buttonSend);
-        buttonGetKey = (Button) findViewById(R.id.buttonKey);
 
         aesKey = getAesKey();
         if (aesKey == null) {
             buttonSend.setEnabled(false);
         } else {
             Log.d(TAG, aesKey.toString());
-            buttonGetKey.setEnabled(false);
+            getMenuIsVisible=false;
             aes = new AES();
             aes.setEncryptionKey(new SecretKeySpec(aesKey, 0, aesKey.length, "AES"));
         }
@@ -103,16 +103,6 @@ public class ChatActivity extends ActionBarActivity {
                 }
             }
         });
-
-        buttonGetKey.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendRSAmod();
-                sendRSAkey();
-            }
-        });
-
-
         listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         listView.setAdapter(chatArrayAdapter);
 
@@ -130,11 +120,37 @@ public class ChatActivity extends ActionBarActivity {
         } catch (Exception e) {
             Log.w(TAG, e);
         }
-        //if (sms_body!=null) {
-        //    chatArrayAdapter.add(new ChatMessage(true, sms_body));
-        //}
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_chat, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_get_key) {
+            sendRSAmod();
+            sendRSAkey();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    public boolean onPrepareOptionsMenu(Menu menu)
+    {
+        MenuItem register = menu.findItem(R.id.action_get_key);
+        register.setVisible(getMenuIsVisible);
+        return true;
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
@@ -166,8 +182,6 @@ public class ChatActivity extends ActionBarActivity {
         SmsManager smsManager = SmsManager.getDefault();
         short port = 4444;
         smsManager.sendDataMessage(phoneNumber, null, port, data, null, null);
-
-
     }
 
     private byte[] getAesKey() {
