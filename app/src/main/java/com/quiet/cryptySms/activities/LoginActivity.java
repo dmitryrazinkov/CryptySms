@@ -1,4 +1,4 @@
-package com.quiet.test.activities;
+package com.quiet.cryptySms.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.quiet.test.R;
+import com.quiet.cryptySms.R;
 
 public class LoginActivity extends Activity {
     SharedPreferences sharedPreferences;

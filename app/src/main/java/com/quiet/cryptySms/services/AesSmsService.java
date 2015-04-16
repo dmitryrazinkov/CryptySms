@@ -1,4 +1,4 @@
-package com.quiet.test.services;
+package com.quiet.cryptySms.services;
 
 import android.app.Service;
 import android.content.ContentValues;
@@ -10,20 +10,16 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-import com.quiet.test.crypt.RSA;
-import com.quiet.test.databases.Db;
-
-import org.apache.commons.codec.binary.Base64;
+import com.quiet.cryptySms.crypt.RSA;
+import com.quiet.cryptySms.databases.Db;
 
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPrivateKeySpec;
-import java.security.spec.RSAPublicKeySpec;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -46,17 +42,17 @@ public class AesSmsService extends Service {
         try {
             aes_key = rsaEncrypt(data);
         } catch (NoSuchAlgorithmException e) {
-
+            Log.w(TAG,e);
         } catch (InvalidKeySpecException e) {
-
+            Log.w(TAG,e);
         } catch (InvalidKeyException e) {
-
+            Log.w(TAG,e);
         } catch (BadPaddingException e) {
-
+            Log.w(TAG,e);
         } catch (NoSuchPaddingException e) {
-
+            Log.w(TAG,e);
         } catch (IllegalBlockSizeException e) {
-
+            Log.w(TAG,e);
         }
         processSms(aes_key, number);
         return START_NOT_STICKY;

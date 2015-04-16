@@ -1,4 +1,4 @@
-package com.quiet.test.databases;
+package com.quiet.cryptySms.databases;
 
 import android.content.Context;
 import android.database.Cursor;

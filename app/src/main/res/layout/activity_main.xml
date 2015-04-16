@@ -10,7 +10,7 @@
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.quiet.test.fragments.ContactFragment"
+        android:name="com.quiet.cryptySms.fragments.ContactFragment"
         android:id="@+id/fragment"
         tools:layout="@layout/contact_list_item" />
 </FrameLayout>

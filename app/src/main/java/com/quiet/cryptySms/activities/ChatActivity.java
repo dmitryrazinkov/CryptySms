@@ -1,8 +1,6 @@
-package com.quiet.test.activities;
+package com.quiet.cryptySms.activities;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,16 +19,12 @@ import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.TextView;
 
-import com.quiet.test.AndroidDatabaseManager;
-import com.quiet.test.R;
-import com.quiet.test.chat.ChatArrayAdapter;
-import com.quiet.test.chat.ChatMessage;
-import com.quiet.test.crypt.AES;
-import com.quiet.test.databases.Db;
-
-import org.apache.commons.codec.binary.Base64;
+import com.quiet.cryptySms.R;
+import com.quiet.cryptySms.chat.ChatArrayAdapter;
+import com.quiet.cryptySms.chat.ChatMessage;
+import com.quiet.cryptySms.crypt.AES;
+import com.quiet.cryptySms.databases.Db;
 
 import java.math.BigInteger;
 import java.util.Date;

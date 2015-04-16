@@ -1,4 +1,4 @@
-package com.quiet.test.activities;
+package com.quiet.cryptySms.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,9 +9,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.quiet.test.AndroidDatabaseManager;
-import com.quiet.test.R;
-import com.quiet.test.crypt.RSA;
+import com.quiet.cryptySms.AndroidDatabaseManager;
+import com.quiet.cryptySms.R;
+import com.quiet.cryptySms.crypt.RSA;
 
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
@@ -30,9 +30,9 @@ public class MainActivity extends ActionBarActivity {
         try {
             rsaInit();
         } catch (NoSuchAlgorithmException e) {
-
+            Log.w(TAG,e);
         } catch (InvalidKeySpecException e) {
-
+            Log.w(TAG,e);
         }
         getIntent().setAction("Already created");
     }

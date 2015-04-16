@@ -1,4 +1,4 @@
-package com.quiet.test;
+package com.quiet.cryptySms;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -30,7 +30,7 @@ import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.quiet.test.databases.Db;
+import com.quiet.cryptySms.databases.Db;
 
 public class AndroidDatabaseManager extends Activity implements OnItemClickListener {
 

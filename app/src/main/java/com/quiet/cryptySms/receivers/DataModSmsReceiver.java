@@ -1,4 +1,4 @@
-package com.quiet.test.receivers;
+package com.quiet.cryptySms.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,15 +6,14 @@ import android.content.Intent;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import com.quiet.test.services.ModSmsService;
-import com.quiet.test.services.RsaSmsService;
+import com.quiet.cryptySms.services.ModSmsService;
 
-public class DataRsaSmsReceiver extends BroadcastReceiver {
-    String TAG = "DataRsaSmsReceiver";
+public class DataModSmsReceiver extends BroadcastReceiver {
+    String TAG = "DataModSmsReceiver";
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "rsa reciver");
+        Log.d(TAG, "mod reciver");
         Object[] pduArray = (Object[]) intent.getExtras().get("pdus");
         SmsMessage[] messages = new SmsMessage[pduArray.length];
         for (int i = 0; i < pduArray.length; i++) {
@@ -28,7 +27,7 @@ public class DataRsaSmsReceiver extends BroadcastReceiver {
             data = concatArray(data, messages[i].getUserData());
         }
 
-        Intent intentService = new Intent(context, RsaSmsService.class);
+        Intent intentService = new Intent(context, ModSmsService.class);
         intentService.putExtra("number", number);
         intentService.putExtra("data", data);
         if ((data != null) && (number != null)) {

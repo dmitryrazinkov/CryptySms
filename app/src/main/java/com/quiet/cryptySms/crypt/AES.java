@@ -1,6 +1,4 @@
-package com.quiet.test.crypt;
-
-import org.apache.commons.codec.binary.Base64;
+package com.quiet.cryptySms.crypt;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;

@@ -1,4 +1,4 @@
-package com.quiet.test.services;
+package com.quiet.cryptySms.services;
 
 import android.app.Service;
 import android.content.ContentValues;
@@ -12,9 +12,9 @@ import android.telephony.SmsManager;
 import android.util.Base64;
 import android.util.Log;
 
-import com.quiet.test.crypt.AES;
-import com.quiet.test.crypt.RSA;
-import com.quiet.test.databases.Db;
+import com.quiet.cryptySms.crypt.AES;
+import com.quiet.cryptySms.crypt.RSA;
+import com.quiet.cryptySms.databases.Db;
 
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
@@ -45,17 +45,17 @@ public class RsaSmsService extends Service {
         try {
             processSms(rsa_key, number);
         } catch (NoSuchAlgorithmException e) {
-
+            Log.w(TAG,e);
         } catch (InvalidKeySpecException e) {
-
+            Log.w(TAG,e);
         } catch (InvalidKeyException e) {
-
+            Log.w(TAG,e);
         } catch (BadPaddingException e) {
-
+            Log.w(TAG,e);
         } catch (NoSuchPaddingException e) {
-
+            Log.w(TAG,e);
         } catch (IllegalBlockSizeException e) {
-
+            Log.w(TAG,e);
         }
         return START_NOT_STICKY;
     }

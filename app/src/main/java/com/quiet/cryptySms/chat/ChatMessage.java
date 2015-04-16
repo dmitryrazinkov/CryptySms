@@ -1,4 +1,4 @@
-package com.quiet.test.chat;
+package com.quiet.cryptySms.chat;
 
 public class ChatMessage {
     public boolean left;

@@ -1,4 +1,4 @@
-package com.quiet.test;
+package com.quiet.cryptySms;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

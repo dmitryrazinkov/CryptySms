@@ -1,4 +1,4 @@
-package com.quiet.test.receivers;
+package com.quiet.cryptySms.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.content.Intent;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
-import com.quiet.test.services.SmsService;
+import com.quiet.cryptySms.services.SmsService;
 
 public class SmsReceiver extends BroadcastReceiver {
     String TAG = "SmsReceiver";

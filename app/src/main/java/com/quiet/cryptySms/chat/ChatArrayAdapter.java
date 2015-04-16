@@ -1,4 +1,4 @@
-package com.quiet.test.chat;
+package com.quiet.cryptySms.chat;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -7,12 +7,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.quiet.test.R;
+import com.quiet.cryptySms.R;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.quiet.test.crypt;
+package com.quiet.cryptySms.crypt;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;

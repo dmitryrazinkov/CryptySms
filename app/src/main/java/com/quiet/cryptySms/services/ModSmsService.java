@@ -1,4 +1,4 @@
-package com.quiet.test.services;
+package com.quiet.cryptySms.services;
 
 import android.app.Service;
 import android.content.ContentValues;
@@ -8,10 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.quiet.test.databases.Db;
+import com.quiet.cryptySms.databases.Db;
 
 import java.math.BigInteger;
-import java.util.Date;
 
 public class ModSmsService extends Service {
     String TAG = "ModSmsService";
