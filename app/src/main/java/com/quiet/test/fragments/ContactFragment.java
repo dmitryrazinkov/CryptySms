@@ -26,6 +26,7 @@ import com.quiet.test.R;
 
 
 public class ContactFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    String TAG = "ContactFragment";
 
     private CursorAdapter mAdapter;
 
@@ -98,11 +99,15 @@ public class ContactFragment extends ListFragment implements LoaderManager.Loade
         }
         View wantedView = listView.getChildAt(wantedChild);
         LinearLayout linearLayout = (LinearLayout) wantedView;
-        TextView textView = (TextView) linearLayout.getChildAt(1);
-        String number = textView.getText().toString();
+        TextView txtName = (TextView) linearLayout.getChildAt(0);
+        TextView txtNumber = (TextView) linearLayout.getChildAt(1);
+        String name = txtName.getText().toString();
+        String number = txtNumber.getText().toString();
+        Log.d(TAG, "Start chat " + name + " " + number);
 
         Intent intent = new Intent("test.chat");
         intent.putExtra("number", number);
+        intent.putExtra("name", name);
         startActivity(intent);
     }
 

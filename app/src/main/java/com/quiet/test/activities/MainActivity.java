@@ -36,10 +36,10 @@ public class MainActivity extends ActionBarActivity {
     private void rsaInit() throws NoSuchAlgorithmException, InvalidKeySpecException {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         BigInteger rsa_private = new BigInteger(sharedPreferences.getString("rsa_private", "0"));
-        BigInteger rsa_public =new BigInteger(sharedPreferences.getString("rsa_public", "0"));
+        BigInteger rsa_public = new BigInteger(sharedPreferences.getString("rsa_public", "0"));
         BigInteger rsa_mod = new BigInteger(sharedPreferences.getString("rsa_mod", "0"));
         if (rsa_private.equals(new BigInteger("0"))) {
-            Log.d(this.getLocalClassName(),"create rsa key");
+            Log.d(this.getLocalClassName(), "create rsa key");
             RSA rsa = new RSA();
             rsa.generateKey();
             SharedPreferences.Editor editor = sharedPreferences.edit();

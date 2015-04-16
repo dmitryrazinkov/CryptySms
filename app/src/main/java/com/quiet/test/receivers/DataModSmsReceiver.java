@@ -9,10 +9,11 @@ import android.util.Log;
 import com.quiet.test.services.ModSmsService;
 
 public class DataModSmsReceiver extends BroadcastReceiver {
-    String TAG="DataModSmsReceiver";
+    String TAG = "DataModSmsReceiver";
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG,"mod reciver");
+        Log.d(TAG, "mod reciver");
         Object[] pduArray = (Object[]) intent.getExtras().get("pdus");
         SmsMessage[] messages = new SmsMessage[pduArray.length];
         for (int i = 0; i < pduArray.length; i++) {
@@ -29,7 +30,7 @@ public class DataModSmsReceiver extends BroadcastReceiver {
         Intent intentService = new Intent(context, ModSmsService.class);
         intentService.putExtra("number", number);
         intentService.putExtra("data", data);
-        if ((data!=null)&&(number!=null)) {
+        if ((data != null) && (number != null)) {
             context.startService(intentService);
         }
 

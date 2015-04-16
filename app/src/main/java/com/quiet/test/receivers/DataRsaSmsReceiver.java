@@ -10,10 +10,11 @@ import com.quiet.test.services.ModSmsService;
 import com.quiet.test.services.RsaSmsService;
 
 public class DataRsaSmsReceiver extends BroadcastReceiver {
-    String TAG="DataRsaSmsReceiver";
+    String TAG = "DataRsaSmsReceiver";
+
     @Override
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG , "rsa reciver");
+        Log.d(TAG, "rsa reciver");
         Object[] pduArray = (Object[]) intent.getExtras().get("pdus");
         SmsMessage[] messages = new SmsMessage[pduArray.length];
         for (int i = 0; i < pduArray.length; i++) {
@@ -30,7 +31,7 @@ public class DataRsaSmsReceiver extends BroadcastReceiver {
         Intent intentService = new Intent(context, RsaSmsService.class);
         intentService.putExtra("number", number);
         intentService.putExtra("data", data);
-        if ((data!=null)&&(number!=null)) {
+        if ((data != null) && (number != null)) {
             context.startService(intentService);
         }
 

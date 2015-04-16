@@ -14,7 +14,7 @@ import java.math.BigInteger;
 import java.util.Date;
 
 public class ModSmsService extends Service {
-    String TAG="ModSmsService";
+    String TAG = "ModSmsService";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -28,7 +28,7 @@ public class ModSmsService extends Service {
         byte[] data = intent.getExtras().getByteArray("data");
         BigInteger mod = new BigInteger(data);
         processSms(mod, number);
-        return START_NOT_STICKY ;
+        return START_NOT_STICKY;
     }
 
     private void processSms(BigInteger mod, String number) {
@@ -39,7 +39,7 @@ public class ModSmsService extends Service {
         ContentValues contentValues = new ContentValues();
         contentValues.put("rsa_mod", mod.toString());
 
-        Log.d(TAG,number + ":" + mod);
+        Log.d(TAG, number + ":" + mod);
 
         Db db = new Db(this);
         SQLiteDatabase database = db.getWritableDatabase();

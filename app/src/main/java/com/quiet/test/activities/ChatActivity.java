@@ -1,5 +1,7 @@
 package com.quiet.test.activities;
 
+import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -7,8 +9,10 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -33,7 +37,7 @@ import java.util.Date;
 
 import javax.crypto.spec.SecretKeySpec;
 
-public class ChatActivity extends Activity {
+public class ChatActivity extends ActionBarActivity {
     private static final String TAG = "ChatActivity";
 
     private ChatArrayAdapter chatArrayAdapter;
@@ -42,6 +46,7 @@ public class ChatActivity extends Activity {
     private Button buttonSend;
     private Button buttonGetKey;
 
+    private String name;
     private String phoneNumber;
 
     private byte[] aesKey;
@@ -56,6 +61,9 @@ public class ChatActivity extends Activity {
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
         phoneNumber = i.getStringExtra("number");
+        name = i.getStringExtra("name");
+        actionBarSetup(name, phoneNumber);
+        // getActionBar().setTitle(name);
         // String sms_body=i.getStringExtra("sms_body");
 
         setContentView(R.layout.chat_activity);
@@ -67,9 +75,9 @@ public class ChatActivity extends Activity {
         if (aesKey == null) {
             buttonSend.setEnabled(false);
         } else {
-            Log.d(TAG,aesKey.toString());
+            Log.d(TAG, aesKey.toString());
             buttonGetKey.setEnabled(false);
-            aes=new AES();
+            aes = new AES();
             aes.setEncryptionKey(new SecretKeySpec(aesKey, 0, aesKey.length, "AES"));
         }
 
@@ -85,7 +93,7 @@ public class ChatActivity extends Activity {
                     try {
                         return sendChatMessage();
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.w(TAG, e);
                     }
                 }
                 return false;
@@ -97,7 +105,7 @@ public class ChatActivity extends Activity {
                 try {
                     sendChatMessage();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    Log.w(TAG, e);
                 }
             }
         });
@@ -110,10 +118,10 @@ public class ChatActivity extends Activity {
             }
         });
 
-        ((Button)findViewById(R.id.buttonDb)).setOnClickListener(new View.OnClickListener() {
+        ((Button) findViewById(R.id.buttonDb)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-                Intent dbmanager = new Intent(getApplicationContext(),AndroidDatabaseManager.class);
+                Intent dbmanager = new Intent(getApplicationContext(), AndroidDatabaseManager.class);
                 startActivity(dbmanager);
             }
         });
@@ -133,7 +141,7 @@ public class ChatActivity extends Activity {
         try {
             fillChat();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.w(TAG, e);
         }
         //if (sms_body!=null) {
         //    chatArrayAdapter.add(new ChatMessage(true, sms_body));
@@ -142,8 +150,17 @@ public class ChatActivity extends Activity {
 
     }
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void actionBarSetup(String name, String number) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            android.support.v7.app.ActionBar ab = getSupportActionBar();
+            ab.setTitle(name);
+            ab.setSubtitle(number);
+        }
+    }
+
     private void sendRSAmod() {
-        Log.d(this.getLocalClassName(),"send rsa mod");
+        Log.d(this.getLocalClassName(), "send rsa mod");
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         BigInteger rsa_mod = new BigInteger(sharedPreferences.getString("rsa_mod", "0"));
         System.out.println(rsa_mod);
@@ -154,7 +171,7 @@ public class ChatActivity extends Activity {
     }
 
     private void sendRSAkey() {
-        Log.d(this.getLocalClassName(),"send rsa key");
+        Log.d(this.getLocalClassName(), "send rsa key");
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         BigInteger rsa_public = new BigInteger(sharedPreferences.getString("rsa_public", "0"));
         System.out.println(rsa_public);
@@ -208,11 +225,11 @@ public class ChatActivity extends Activity {
     }
 
     private void sendSms() throws Exception {
-        Log.d(this.getLocalClassName(),"sending sms");
+        Log.d(this.getLocalClassName(), "sending sms");
         SmsManager sms = SmsManager.getDefault();
-        String text=aesCryptText(chatText.getText().toString());
+        String text = aesCryptText(chatText.getText().toString());
         sms.sendTextMessage(phoneNumber, null, text, null, null);
-        addSmsToDb();
+        addSmsToDb(text);
     }
 
     private String aesCryptText(String mes) throws Exception {
@@ -220,10 +237,10 @@ public class ChatActivity extends Activity {
         return aes.encrypt(mes);
     }
 
-    private void addSmsToDb() {
+    private void addSmsToDb(String text) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("number", phoneNumber);
-        contentValues.put("message", chatText.getText().toString());
+        contentValues.put("message", text);
         contentValues.put("isIncome", 0);
         contentValues.put("date", new Date().getTime());
 

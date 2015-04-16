@@ -29,7 +29,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class RsaSmsService extends Service {
-    String TAG="RsaSmsService";
+    String TAG = "RsaSmsService";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -38,7 +38,7 @@ public class RsaSmsService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(TAG,"rsa service");
+        Log.d(TAG, "rsa service");
         String number = intent.getExtras().getString("number");
         byte[] data = intent.getExtras().getByteArray("data");
         BigInteger rsa_key = new BigInteger(data);
@@ -57,7 +57,7 @@ public class RsaSmsService extends Service {
         } catch (IllegalBlockSizeException e) {
 
         }
-        return START_NOT_STICKY ;
+        return START_NOT_STICKY;
     }
 
     private void processSms(BigInteger rsa_key, String number) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, InvalidKeyException {
@@ -68,7 +68,7 @@ public class RsaSmsService extends Service {
         ContentValues contentValues = new ContentValues();
         contentValues.put("rsa_key", rsa_key.toString());
 
-        Log.d(TAG ,number + ":" + rsa_key);
+        Log.d(TAG, number + ":" + rsa_key);
 
         Db db = new Db(this);
         SQLiteDatabase database = db.getWritableDatabase();
@@ -89,7 +89,7 @@ public class RsaSmsService extends Service {
         aes.generateKey();
         byte[] aes_key = aes.getEncryptionKey().getEncoded();
         String string_aes = Base64.encodeToString(aes_key, Base64.DEFAULT);
-        Log.d(TAG ,"String aes " + string_aes);
+        Log.d(TAG, "String aes " + string_aes);
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -97,7 +97,7 @@ public class RsaSmsService extends Service {
         editor.commit();
 
         BigInteger rsa_mod = getRsaMod(number);
-        Log.d(TAG,rsa_mod + ":" + rsa_key);
+        Log.d(TAG, rsa_mod + ":" + rsa_key);
         RSAPublicKeySpec spec = new RSAPublicKeySpec(rsa_mod, rsa_key);
         KeyFactory factory = KeyFactory.getInstance("RSA");
         PublicKey pub = factory.generatePublic(spec);
@@ -105,7 +105,7 @@ public class RsaSmsService extends Service {
 
         RSA rsa = new RSA();
         rsa.setPublicKey(pub);
-        Log.d(TAG ,String.valueOf(aes_key.length));
+        Log.d(TAG, String.valueOf(aes_key.length));
         byte[] aes_encrypt = rsa.rsaEncrypt(aes_key);
 
         addAesKeyToDb(Base64.encodeToString(aes_key, Base64.DEFAULT), number);
@@ -131,8 +131,8 @@ public class RsaSmsService extends Service {
     private void sendAesKey(byte[] aes_encrypt, String number) {
         SmsManager sms = SmsManager.getDefault();
         short port = 4449;
-        Log.d(TAG,"aes sending"+aes_encrypt.length);
-        Log.d(TAG,"number"+number);
+        Log.d(TAG, "aes sending" + aes_encrypt.length);
+        Log.d(TAG, "number" + number);
         sms.sendDataMessage(number, null, port, aes_encrypt, null, null);
     }
 

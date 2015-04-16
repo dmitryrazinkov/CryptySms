@@ -9,7 +9,8 @@ import android.util.Log;
 import com.quiet.test.services.AesSmsService;
 
 public class DataAesSmsReceiver extends BroadcastReceiver {
-    String TAG="DataAesSmsReceiver";
+    String TAG = "DataAesSmsReceiver";
+
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "aes receiver");
@@ -29,7 +30,7 @@ public class DataAesSmsReceiver extends BroadcastReceiver {
         Intent intentService = new Intent(context, AesSmsService.class);
         intentService.putExtra("number", number);
         intentService.putExtra("data", data);
-        if ((data!=null)&&(number!=null)) {
+        if ((data != null) && (number != null)) {
             context.startService(intentService);
         }
 

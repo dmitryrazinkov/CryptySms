@@ -30,7 +30,7 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 public class AesSmsService extends Service {
-    String TAG="AesSmsService";
+    String TAG = "AesSmsService";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -42,7 +42,7 @@ public class AesSmsService extends Service {
         Log.d(TAG, "aes service");
         String number = intent.getExtras().getString("number");
         byte[] data = intent.getExtras().getByteArray("data");
-        byte[] aes_key= new byte[0];
+        byte[] aes_key = new byte[0];
         try {
             aes_key = rsaEncrypt(data);
         } catch (NoSuchAlgorithmException e) {
@@ -59,11 +59,11 @@ public class AesSmsService extends Service {
 
         }
         processSms(aes_key, number);
-        return START_NOT_STICKY ;
+        return START_NOT_STICKY;
     }
 
     private byte[] rsaEncrypt(byte[] data) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, InvalidKeyException {
-        RSA rsa=new RSA();
+        RSA rsa = new RSA();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         BigInteger rsa_private = new BigInteger(sharedPreferences.getString("rsa_private", "0"));
         BigInteger rsa_mod = new BigInteger(sharedPreferences.getString("rsa_mod", "0"));
@@ -85,7 +85,7 @@ public class AesSmsService extends Service {
         ContentValues contentValues = new ContentValues();
         contentValues.put("aes_key", android.util.Base64.encodeToString(aes_key, android.util.Base64.DEFAULT));
 
-        Log.d(TAG,number + ":" + android.util.Base64.encodeToString(aes_key, android.util.Base64.DEFAULT));
+        Log.d(TAG, number + ":" + android.util.Base64.encodeToString(aes_key, android.util.Base64.DEFAULT));
 
         Db db = new Db(this);
         SQLiteDatabase database = db.getWritableDatabase();

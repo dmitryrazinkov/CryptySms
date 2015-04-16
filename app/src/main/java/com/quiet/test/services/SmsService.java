@@ -23,7 +23,7 @@ public class SmsService extends Service {
         String sms_body = intent.getExtras().getString("sms_body");
         String number = intent.getExtras().getString("number");
         processSms(sms_body, number);
-        return START_NOT_STICKY ;
+        return START_NOT_STICKY;
     }
 
     private void processSms(String sms_body, String number) {
@@ -32,7 +32,7 @@ public class SmsService extends Service {
         String[] args = new String[]{number};
         Cursor c = database.query("keys", null, "number=?", args, null, null, null);
         if (c.moveToFirst()) {
-            addToDatabase(database,sms_body, number);
+            addToDatabase(database, sms_body, number);
             Intent intent = new Intent("test.chat");
             intent.putExtra("number", number);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -41,7 +41,7 @@ public class SmsService extends Service {
         database.close();
     }
 
-    private void addToDatabase(SQLiteDatabase database,String sms_body, String number) {
+    private void addToDatabase(SQLiteDatabase database, String sms_body, String number) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("number", number);
         contentValues.put("message", sms_body);

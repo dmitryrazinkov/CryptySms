@@ -23,12 +23,12 @@ public class AES {
         Cipher cipher = getCipher(Cipher.ENCRYPT_MODE);
         byte[] encryptedBytes = cipher.doFinal(plainText.getBytes());
 
-        return Base64.encodeBase64String(encryptedBytes);
+        return android.util.Base64.encodeToString(encryptedBytes, android.util.Base64.DEFAULT);
     }
 
     public String decrypt(String encrypted) throws Exception {
         Cipher cipher = getCipher(Cipher.DECRYPT_MODE);
-        byte[] plainBytes = cipher.doFinal(Base64.decodeBase64(encrypted));
+        byte[] plainBytes = cipher.doFinal(android.util.Base64.decode(encrypted, android.util.Base64.DEFAULT));
 
         return new String(plainBytes);
     }
