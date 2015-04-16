@@ -118,13 +118,6 @@ public class ChatActivity extends ActionBarActivity {
             }
         });
 
-        ((Button) findViewById(R.id.buttonDb)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                Intent dbmanager = new Intent(getApplicationContext(), AndroidDatabaseManager.class);
-                startActivity(dbmanager);
-            }
-        });
 
         listView.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         listView.setAdapter(chatArrayAdapter);

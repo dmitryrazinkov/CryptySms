@@ -1,5 +1,6 @@
 package com.quiet.test.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.quiet.test.AndroidDatabaseManager;
 import com.quiet.test.R;
 import com.quiet.test.crypt.RSA;
 
@@ -17,6 +19,7 @@ import java.security.spec.InvalidKeySpecException;
 
 
 public class MainActivity extends ActionBarActivity {
+    String TAG="MainActivity";
 
     SharedPreferences sharedPreferences;
 
@@ -31,6 +34,21 @@ public class MainActivity extends ActionBarActivity {
         } catch (InvalidKeySpecException e) {
 
         }
+        getIntent().setAction("Already created");
+    }
+
+    @Override
+    protected void onResume() {
+        String action = getIntent().getAction();
+        if(action == null || !action.equals("Already created")) {
+            Log.d(TAG,"restart");
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+        else
+            getIntent().setAction(null);
+        super.onResume();
     }
 
     private void rsaInit() throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -71,6 +89,15 @@ public class MainActivity extends ActionBarActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent dbmanager = new Intent(getApplicationContext(), AndroidDatabaseManager.class);
+            startActivity(dbmanager);
+            return true;
+        }
+
+        if (id==R.id.action_contact) {
+            Log.d(TAG,"adding contact");
+            Intent intent=new Intent(getApplicationContext(),AddContactActiity.class);
+            startActivity(intent);
             return true;
         }
 

@@ -50,14 +50,6 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="db"
-            android:id="@+id/buttonDb"
-            android:layout_above="@+id/buttonKey"
-            android:layout_alignLeft="@+id/buttonKey"
-            android:layout_alignStart="@+id/buttonKey" />
     </RelativeLayout>
 
 </RelativeLayout>
