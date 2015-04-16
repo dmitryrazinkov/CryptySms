@@ -36,20 +36,27 @@ public class LoginActivity extends Activity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String password=editTextPassword.getText().toString();
                 if (key.equals("")) {
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString("login_key", editTextPassword.getText().toString());
-                    editor.commit();
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if (password.length()<6) {
+                        Toast.makeText(getApplicationContext(), "Password must include more then" +
+                                " 5 character", Toast.LENGTH_SHORT).show();
+                    } else {
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("login_key", password);
+                        editor.commit();
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 } else {
-                    if (key.equals(editTextPassword.getText().toString())) {
+                    if (key.equals(password)) {
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(intent);
                         finish();
                     } else {
-                        Toast.makeText(getApplicationContext(), "Incorrect password", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Incorrect password",
+                                Toast.LENGTH_SHORT).show();
                     }
                 }
 
