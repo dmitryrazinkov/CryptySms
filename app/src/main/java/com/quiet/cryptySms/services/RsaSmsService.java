@@ -45,17 +45,17 @@ public class RsaSmsService extends Service {
         try {
             processSms(rsa_key, number);
         } catch (NoSuchAlgorithmException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         } catch (InvalidKeySpecException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         } catch (InvalidKeyException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         } catch (BadPaddingException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         } catch (NoSuchPaddingException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         } catch (IllegalBlockSizeException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         }
         return START_NOT_STICKY;
     }

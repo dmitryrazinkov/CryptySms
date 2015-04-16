@@ -36,9 +36,9 @@ public class LoginActivity extends Activity {
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String password=editTextPassword.getText().toString();
+                String password = editTextPassword.getText().toString();
                 if (key.equals("")) {
-                    if (password.length()<6) {
+                    if (password.length() < 6) {
                         Toast.makeText(getApplicationContext(), "Password must include more then" +
                                 " 5 character", Toast.LENGTH_SHORT).show();
                     } else {

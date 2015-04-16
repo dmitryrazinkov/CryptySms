@@ -19,7 +19,7 @@ import java.security.spec.InvalidKeySpecException;
 
 
 public class MainActivity extends ActionBarActivity {
-    String TAG="MainActivity";
+    String TAG = "MainActivity";
 
     SharedPreferences sharedPreferences;
 
@@ -30,9 +30,9 @@ public class MainActivity extends ActionBarActivity {
         try {
             rsaInit();
         } catch (NoSuchAlgorithmException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         } catch (InvalidKeySpecException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         }
         getIntent().setAction("Already created");
     }
@@ -40,13 +40,12 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onResume() {
         String action = getIntent().getAction();
-        if(action == null || !action.equals("Already created")) {
-            Log.d(TAG,"restart");
+        if (action == null || !action.equals("Already created")) {
+            Log.d(TAG, "restart");
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
-        }
-        else
+        } else
             getIntent().setAction(null);
         super.onResume();
     }
@@ -94,9 +93,9 @@ public class MainActivity extends ActionBarActivity {
             return true;
         }
 
-        if (id==R.id.action_contact) {
-            Log.d(TAG,"adding contact");
-            Intent intent=new Intent(getApplicationContext(),AddContactActiity.class);
+        if (id == R.id.action_contact) {
+            Log.d(TAG, "adding contact");
+            Intent intent = new Intent(getApplicationContext(), AddContactActiity.class);
             startActivity(intent);
             return true;
         }

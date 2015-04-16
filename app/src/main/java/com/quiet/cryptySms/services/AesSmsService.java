@@ -42,17 +42,17 @@ public class AesSmsService extends Service {
         try {
             aes_key = rsaEncrypt(data);
         } catch (NoSuchAlgorithmException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         } catch (InvalidKeySpecException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         } catch (InvalidKeyException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         } catch (BadPaddingException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         } catch (NoSuchPaddingException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         } catch (IllegalBlockSizeException e) {
-            Log.w(TAG,e);
+            Log.w(TAG, e);
         }
         processSms(aes_key, number);
         return START_NOT_STICKY;

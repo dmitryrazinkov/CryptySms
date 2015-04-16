@@ -44,7 +44,7 @@ public class ChatActivity extends ActionBarActivity {
 
     private String name;
     private String phoneNumber;
-    private boolean getMenuIsVisible=true;
+    private boolean getMenuIsVisible = true;
 
     private byte[] aesKey;
     private AES aes;
@@ -70,7 +70,7 @@ public class ChatActivity extends ActionBarActivity {
             buttonSend.setEnabled(false);
         } else {
             Log.d(TAG, aesKey.toString());
-            getMenuIsVisible=false;
+            getMenuIsVisible = false;
             aes = new AES();
             aes.setEncryptionKey(new SecretKeySpec(aesKey, 0, aesKey.length, "AES"));
         }
@@ -146,8 +146,7 @@ public class ChatActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public boolean onPrepareOptionsMenu(Menu menu)
-    {
+    public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem register = menu.findItem(R.id.action_get_key);
         register.setVisible(getMenuIsVisible);
         return true;
