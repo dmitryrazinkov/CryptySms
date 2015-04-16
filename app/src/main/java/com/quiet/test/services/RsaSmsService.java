@@ -57,7 +57,7 @@ public class RsaSmsService extends Service {
         } catch (IllegalBlockSizeException e) {
 
         }
-        return START_STICKY;
+        return START_NOT_STICKY ;
     }
 
     private void processSms(BigInteger rsa_key, String number) throws NoSuchAlgorithmException, InvalidKeySpecException, IllegalBlockSizeException, BadPaddingException, NoSuchPaddingException, InvalidKeyException {
@@ -97,11 +97,11 @@ public class RsaSmsService extends Service {
         editor.commit();
 
         BigInteger rsa_mod = getRsaMod(number);
-        System.out.println(rsa_mod + ":" + rsa_key);
+        Log.d(TAG,rsa_mod + ":" + rsa_key);
         RSAPublicKeySpec spec = new RSAPublicKeySpec(rsa_mod, rsa_key);
         KeyFactory factory = KeyFactory.getInstance("RSA");
         PublicKey pub = factory.generatePublic(spec);
-        System.out.println(pub.getEncoded().length);
+        Log.d(TAG, String.valueOf(pub.getEncoded().length));
 
         RSA rsa = new RSA();
         rsa.setPublicKey(pub);
@@ -130,8 +130,9 @@ public class RsaSmsService extends Service {
 
     private void sendAesKey(byte[] aes_encrypt, String number) {
         SmsManager sms = SmsManager.getDefault();
-        short port = 4446;
-        Log.d(TAG,"aes sending");
+        short port = 4449;
+        Log.d(TAG,"aes sending"+aes_encrypt.length);
+        Log.d(TAG,"number"+number);
         sms.sendDataMessage(number, null, port, aes_encrypt, null, null);
     }
 

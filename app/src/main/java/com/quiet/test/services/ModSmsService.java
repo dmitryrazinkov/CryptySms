@@ -28,7 +28,7 @@ public class ModSmsService extends Service {
         byte[] data = intent.getExtras().getByteArray("data");
         BigInteger mod = new BigInteger(data);
         processSms(mod, number);
-        return START_STICKY;
+        return START_NOT_STICKY ;
     }
 
     private void processSms(BigInteger mod, String number) {

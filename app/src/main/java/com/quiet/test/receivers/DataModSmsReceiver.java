@@ -29,7 +29,9 @@ public class DataModSmsReceiver extends BroadcastReceiver {
         Intent intentService = new Intent(context, ModSmsService.class);
         intentService.putExtra("number", number);
         intentService.putExtra("data", data);
-        context.startService(intentService);
+        if ((data!=null)&&(number!=null)) {
+            context.startService(intentService);
+        }
 
         abortBroadcast();
     }

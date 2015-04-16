@@ -30,7 +30,9 @@ public class DataRsaSmsReceiver extends BroadcastReceiver {
         Intent intentService = new Intent(context, RsaSmsService.class);
         intentService.putExtra("number", number);
         intentService.putExtra("data", data);
-        context.startService(intentService);
+        if ((data!=null)&&(number!=null)) {
+            context.startService(intentService);
+        }
 
         abortBroadcast();
     }

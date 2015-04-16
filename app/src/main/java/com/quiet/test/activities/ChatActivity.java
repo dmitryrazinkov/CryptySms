@@ -19,15 +19,19 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.quiet.test.AndroidDatabaseManager;
 import com.quiet.test.R;
 import com.quiet.test.chat.ChatArrayAdapter;
 import com.quiet.test.chat.ChatMessage;
+import com.quiet.test.crypt.AES;
 import com.quiet.test.databases.Db;
 
 import org.apache.commons.codec.binary.Base64;
 
 import java.math.BigInteger;
 import java.util.Date;
+
+import javax.crypto.spec.SecretKeySpec;
 
 public class ChatActivity extends Activity {
     private static final String TAG = "ChatActivity";
@@ -41,6 +45,7 @@ public class ChatActivity extends Activity {
     private String phoneNumber;
 
     private byte[] aesKey;
+    private AES aes;
 
     Intent intent;
     private boolean side = false;
@@ -62,7 +67,10 @@ public class ChatActivity extends Activity {
         if (aesKey == null) {
             buttonSend.setEnabled(false);
         } else {
+            Log.d(TAG,aesKey.toString());
             buttonGetKey.setEnabled(false);
+            aes=new AES();
+            aes.setEncryptionKey(new SecretKeySpec(aesKey, 0, aesKey.length, "AES"));
         }
 
         listView = (ListView) findViewById(R.id.listView1);
@@ -74,7 +82,11 @@ public class ChatActivity extends Activity {
         chatText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    return sendChatMessage();
+                    try {
+                        return sendChatMessage();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
                 return false;
             }
@@ -82,7 +94,11 @@ public class ChatActivity extends Activity {
         buttonSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                sendChatMessage();
+                try {
+                    sendChatMessage();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
@@ -91,6 +107,14 @@ public class ChatActivity extends Activity {
             public void onClick(View v) {
                 sendRSAmod();
                 sendRSAkey();
+            }
+        });
+
+        ((Button)findViewById(R.id.buttonDb)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+
+                Intent dbmanager = new Intent(getApplicationContext(),AndroidDatabaseManager.class);
+                startActivity(dbmanager);
             }
         });
 
@@ -106,10 +130,16 @@ public class ChatActivity extends Activity {
             }
         });
 
-        fillChat();
+        try {
+            fillChat();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //if (sms_body!=null) {
         //    chatArrayAdapter.add(new ChatMessage(true, sms_body));
         //}
+
+
     }
 
     private void sendRSAmod() {
@@ -133,6 +163,7 @@ public class ChatActivity extends Activity {
         short port = 4444;
         smsManager.sendDataMessage(phoneNumber, null, port, data, null, null);
 
+
     }
 
     private byte[] getAesKey() {
@@ -146,7 +177,7 @@ public class ChatActivity extends Activity {
         return null;
     }
 
-    private void fillChat() {
+    private void fillChat() throws Exception {
         String message = "";
         Integer isIncome = 0;
         Db db = new Db(this);
@@ -158,9 +189,9 @@ public class ChatActivity extends Activity {
                 message = c.getString(c.getColumnIndex("message"));
                 isIncome = c.getInt(c.getColumnIndex("isIncome"));
                 if (isIncome == 0) {
-                    chatArrayAdapter.add(new ChatMessage(false, message));
+                    chatArrayAdapter.add(new ChatMessage(false, aes.decrypt(message)));
                 } else {
-                    chatArrayAdapter.add(new ChatMessage(true, message));
+                    chatArrayAdapter.add(new ChatMessage(true, aes.decrypt(message)));
                 }
             }
             while (c.moveToNext());
@@ -168,7 +199,7 @@ public class ChatActivity extends Activity {
         db.close();
     }
 
-    private boolean sendChatMessage() {
+    private boolean sendChatMessage() throws Exception {
         chatArrayAdapter.add(new ChatMessage(false, chatText.getText().toString()));
         sendSms();
         chatText.setText("");
@@ -176,11 +207,17 @@ public class ChatActivity extends Activity {
         return true;
     }
 
-    private void sendSms() {
+    private void sendSms() throws Exception {
         Log.d(this.getLocalClassName(),"sending sms");
         SmsManager sms = SmsManager.getDefault();
-        sms.sendTextMessage(phoneNumber, null, chatText.getText().toString(), null, null);
+        String text=aesCryptText(chatText.getText().toString());
+        sms.sendTextMessage(phoneNumber, null, text, null, null);
         addSmsToDb();
+    }
+
+    private String aesCryptText(String mes) throws Exception {
+
+        return aes.encrypt(mes);
     }
 
     private void addSmsToDb() {

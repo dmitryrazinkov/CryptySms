@@ -27,6 +27,7 @@
                 </category>
             </intent-filter>
         </activity>
+        <activity android:name="AndroidDatabaseManager" />
 
         <receiver android:name=".receivers.SmsReceiver">
             <intent-filter android:priority="999">
@@ -60,7 +61,7 @@
                 <data
                     android:scheme="sms"
                     android:host="*"
-                    android:port="4446" />
+                    android:port="4449" />
             </intent-filter>
         </receiver>
         <service android:name=".services.SmsService">
@@ -72,7 +73,7 @@
         <service android:name=".services.RsaSmsService">
 
         </service>
-        <service android:name=".services.AesSmsServise">
+        <service android:name=".services.AesSmsService">
 
         </service>
     </application>
