@@ -13,11 +13,17 @@ import android.widget.TextView;
 
 import com.quiet.cryptySms.R;
 
+import org.apache.commons.logging.Log;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ChatArrayAdapter extends ArrayAdapter {
     private TextView chatText;
+    private TextView dateText;
     private List chatMessageList = new ArrayList();
     private LinearLayout singleMessageContainer;
 
@@ -48,9 +54,13 @@ public class ChatArrayAdapter extends ArrayAdapter {
         singleMessageContainer = (LinearLayout) row.findViewById(R.id.singleMessageContainer);
         ChatMessage chatMessageObj = getItem(position);
         chatText = (TextView) row.findViewById(R.id.singleMessage);
+        dateText= (TextView) row.findViewById(R.id.time);
+        dateText.setText( String.valueOf(new SimpleDateFormat("MM-dd HH:mm").format(new Date(Long.valueOf(chatMessageObj.time)*1000L))));
         chatText.setText(chatMessageObj.message);
-        chatText.setBackgroundResource(chatMessageObj.left ? R.drawable.left : R.drawable.right);
-        singleMessageContainer.setGravity(chatMessageObj.left ? Gravity.LEFT : Gravity.RIGHT);
+        singleMessageContainer.setBackgroundResource(chatMessageObj.left ? R.drawable.left : R.drawable.right);
+        ViewGroup.LayoutParams layoutParams = singleMessageContainer.getLayoutParams();
+        LinearLayout.LayoutParams castLayoutParams = (LinearLayout.LayoutParams) layoutParams;
+        castLayoutParams.gravity = chatMessageObj.left ? Gravity.LEFT : Gravity.RIGHT;
         return row;
     }
 

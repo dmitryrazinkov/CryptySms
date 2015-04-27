@@ -33,7 +33,7 @@ import java.math.BigInteger;
 import java.util.Date;
 
 import javax.crypto.spec.SecretKeySpec;
-
+// TODO get 20 messages, make button("all messages"?) for other
 public class ChatActivity extends ActionBarActivity {
     private static final String TAG = "ChatActivity";
 
@@ -196,6 +196,7 @@ public class ChatActivity extends ActionBarActivity {
 
     private void fillChat() throws Exception {
         String message = "";
+        String time="";
         Integer isIncome = 0;
         Db db = new Db(this);
         SQLiteDatabase database = db.getWritableDatabase();
@@ -204,11 +205,12 @@ public class ChatActivity extends ActionBarActivity {
         if (c.moveToFirst()) {
             do {
                 message = c.getString(c.getColumnIndex("message"));
+                time=c.getString(c.getColumnIndex("date"));
                 isIncome = c.getInt(c.getColumnIndex("isIncome"));
                 if (isIncome == 0) {
-                    chatArrayAdapter.add(new ChatMessage(false, aes.decrypt(message)));
+                    chatArrayAdapter.add(new ChatMessage(false, aes.decrypt(message),time));
                 } else {
-                    chatArrayAdapter.add(new ChatMessage(true, aes.decrypt(message)));
+                    chatArrayAdapter.add(new ChatMessage(true, aes.decrypt(message),time));
                 }
             }
             while (c.moveToNext());
@@ -217,7 +219,7 @@ public class ChatActivity extends ActionBarActivity {
     }
 
     private boolean sendChatMessage() throws Exception {
-        chatArrayAdapter.add(new ChatMessage(false, chatText.getText().toString()));
+        chatArrayAdapter.add(new ChatMessage(false, chatText.getText().toString(),String.valueOf(new Date().getTime()/1000)));
         sendSms();
         chatText.setText("");
         side = !side;
@@ -242,7 +244,7 @@ public class ChatActivity extends ActionBarActivity {
         contentValues.put("number", phoneNumber);
         contentValues.put("message", text);
         contentValues.put("isIncome", 0);
-        contentValues.put("date", new Date().getTime());
+        contentValues.put("date", new Date().getTime()/1000);
 
         Db db = new Db(this);
         SQLiteDatabase database = db.getWritableDatabase();

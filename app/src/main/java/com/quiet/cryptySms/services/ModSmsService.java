@@ -11,7 +11,7 @@ import android.util.Log;
 import com.quiet.cryptySms.databases.Db;
 
 import java.math.BigInteger;
-
+//TODO make like RSA service
 public class ModSmsService extends Service {
     String TAG = "ModSmsService";
 

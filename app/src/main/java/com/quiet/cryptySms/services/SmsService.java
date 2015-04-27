@@ -10,7 +10,7 @@ import android.os.IBinder;
 import com.quiet.cryptySms.databases.Db;
 
 import java.util.Date;
-
+// TODO don't receive ancrypt messages
 public class SmsService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
